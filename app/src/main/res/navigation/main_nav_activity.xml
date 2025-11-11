@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_activity"
+    app:startDestination="@id/startFragment">
+
+    <fragment
+        android:id="@+id/startFragment"
+        android:name="com.nazulislam.taskmeneger.start.presentation.StartFragment"
+        android:label="fragment_start"
+        tools:layout="@layout/fragment_start" >
+        <action
+            android:id="@+id/action_startFragment_to_taskDeatilsFragment"
+            app:destination="@id/taskDeatilsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/taskDeatilsFragment"
+        android:name="com.nazulislam.taskmeneger.taskinfo.presentation.TaskDeatilsFragment"
+        android:label="fragment_task_deatils"
+        tools:layout="@layout/fragment_task_deatils" />
+</navigation>
