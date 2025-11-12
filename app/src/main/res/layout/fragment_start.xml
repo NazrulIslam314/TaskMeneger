@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:background="?attr/colorSurfaceContainerLow">
 
-
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -19,30 +18,36 @@
             app:cardBackgroundColor="?attr/colorSurfaceContainer"
             app:strokeWidth="0dp">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
                 android:padding="@dimen/_8sdp">
 
                 <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_width="@dimen/_48sdp"
-                    android:layout_height="@dimen/_48sdp"
+                    android:id="@+id/logoImage"
+                    android:layout_width="@dimen/_32sdp"
+                    android:layout_height="@dimen/_32sdp"
+                    android:layout_marginStart="@dimen/_16sdp"
                     android:contentDescription="@string/app_name"
-                    android:src="@mipmap/ic_launcher" />
+                    android:src="@mipmap/ic_launcher"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:id="@+id/appTitle"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_12sdp"
                     android:fontFamily="@font/raleway_medium"
                     android:text="@string/app_name"
                     android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-                    android:textColor="?attr/colorOnSurface" />
-            </LinearLayout>
+                    android:textColor="?attr/colorOnSurface"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
-
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -50,19 +55,52 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/circle_background"
         android:orientation="vertical"
-        android:padding="@dimen/_16sdp"
+        android:padding="@dimen/_4sdp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="" />
+
+        <!-- Pending Task RecyclerView        -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/TaskRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?attr/colorSurface"
+            android:clipToPadding="false"
+            android:padding="@dimen/_10sdp"
+            android:paddingBottom="@dimen/_64sdp"
+            tools:listitem="@layout/task_item" />
+
+
+        <!-- Complete Task RecyclerView Start     -->
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/_16sdp"
+            android:fontFamily="@font/raleway_medium"
+            android:background="?attr/colorSurfaceContainer"
+            android:gravity="center"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/completed_task"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvTasks"
+            android:id="@+id/TaskCompletedRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:background="?attr/colorSurface"
             android:clipToPadding="false"
+            android:padding="@dimen/_10sdp"
             android:paddingBottom="@dimen/_64sdp"
-            tools:listitem="@layout/task_item" />
+            tools:listitem="@layout/task_complete_item" />
+        <!-- Complete Task RecyclerView End     -->
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -74,6 +112,7 @@
         android:contentDescription="@string/add_task"
         app:backgroundTint="?attr/colorPrimaryContainer"
         app:icon="@drawable/ic_add_icon"
-        app:iconTint="?attr/colorOnPrimaryContainer" />
+        app:iconTint="?attr/colorOnPrimaryContainer"
+        tools:ignore="ClassNameCheck" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

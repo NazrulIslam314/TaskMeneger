@@ -4,79 +4,88 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
     android:layout_marginVertical="@dimen/_8sdp"
     android:clickable="true"
     android:focusable="true"
-    app:cardBackgroundColor="?attr/colorSurfaceContainer"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="?attr/colorSurfaceContainerHigh"
     app:cardCornerRadius="@dimen/_16sdp"
-    app:cardElevation="@dimen/_1sdp"
-    app:strokeWidth="0dp">
+    app:cardElevation="@dimen/_2sdp"
+    app:strokeColor="?attr/colorOutlineVariant"
+    app:strokeWidth="@dimen/_1sdp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="@dimen/_64sdp"
         android:padding="@dimen/_12sdp">
 
+        <!-- Task completion checkbox -->
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/taskCheckbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minWidth="@dimen/_48sdp"
-            android:minHeight="@dimen/_48sdp"
+            android:buttonTint="?attr/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/mark_task_complete" />
 
+        <!-- Main task title -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/taskTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_8sdp"
-            android:layout_marginEnd="@dimen/_16sdp"
+            android:layout_marginEnd="@dimen/_12sdp"
             android:ellipsize="end"
             android:maxLines="2"
-            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+            android:textAppearance="?attr/textAppearanceTitleMedium"
             android:textColor="?attr/colorOnSurface"
-            app:layout_constraintBottom_toTopOf="@+id/taskDueDate"
-            app:layout_constraintEnd_toStartOf="@+id/taskStatusChip"
-            app:layout_constraintHorizontal_bias="0.0"
+            android:fontFamily="@font/raleway_medium"
             app:layout_constraintStart_toEndOf="@id/taskCheckbox"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/taskStatusChip"
+            app:layout_constraintBottom_toTopOf="@id/taskDueDate"
             app:layout_constraintVertical_chainStyle="packed"
             tools:text="Complete project documentation and feature list for Q4" />
 
+        <!-- Task due date with subtle icon -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/taskDueDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_marginTop="@dimen/_4sdp"
             android:drawableStart="@drawable/ic_calender_icon"
             android:drawablePadding="@dimen/_4sdp"
             android:drawableTint="?attr/colorOnSurfaceVariant"
             android:gravity="center_vertical"
             android:textAppearance="?attr/textAppearanceBodySmall"
             android:textColor="?attr/colorOnSurfaceVariant"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@id/taskTitle"
             app:layout_constraintTop_toBottomOf="@id/taskTitle"
+            app:layout_constraintStart_toStartOf="@id/taskTitle"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:text="Dec 31, 2024" />
 
+        <!-- Task status chip -->
         <com.google.android.material.chip.Chip
             android:id="@+id/taskStatusChip"
-            style="@style/Widget.Material3.Chip.Assist"
+            style="@style/Widget.Material3.Chip.Assist.Elevated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checkable="false"
             android:textAppearance="?attr/textAppearanceLabelSmall"
-            app:chipBackgroundColor="?attr/colorPrimaryContainer"
-            app:chipEndPadding="@dimen/_10sdp"
+            android:textAlignment="center"
+            app:chipBackgroundColor="?attr/colorSecondaryContainer"
+            app:chipStrokeColor="?attr/colorOutlineVariant"
+            app:chipStrokeWidth="@dimen/_1sdp"
             app:chipMinHeight="@dimen/_32sdp"
             app:chipStartPadding="@dimen/_10sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:chipEndPadding="@dimen/_10sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Pending" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="In Progress" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </com.google.android.material.card.MaterialCardView>

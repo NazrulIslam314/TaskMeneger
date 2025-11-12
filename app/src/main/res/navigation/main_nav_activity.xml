@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/startFragment"
-        android:name="com.nazulislam.taskmeneger.start.presentation.StartFragment"
+        android:name="com.nazulislam.taskmeneger.presentation.StartFragment"
         android:label="fragment_start"
         tools:layout="@layout/fragment_start" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/taskDeatilsFragment"
-        android:name="com.nazulislam.taskmeneger.taskinfo.presentation.TaskDetailsFragment"
+        android:name="com.nazulislam.taskmeneger.presentation.TaskDetailsFragment"
         android:label="fragment_task_deatils"
         tools:layout="@layout/fragment_task_details" />
 </navigation>
