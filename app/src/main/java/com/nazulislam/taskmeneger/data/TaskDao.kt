@@ -22,5 +22,18 @@ interface TaskDao {
     @Query("SELECT * FROM taskDb WHERE id = :taskId")
     fun findTaskById(taskId: Int): Task?
 
+    @Query("UPDATE taskDb SET isCompleted = :isCompleted WHERE id = :taskId")
+    fun updateTaskCompletionStatus(taskId: Int, isCompleted: Boolean)
 
+    @Query("SELECT * FROM taskDb WHERE isCompleted = 0")
+    fun getPendingTasks(): List<Task>
+
+    @Query("SELECT * FROM taskDb WHERE isCompleted = 1")
+    fun getCompletedTasks(): List<Task>
+
+    @Query("DELETE FROM taskDb WHERE id = :taskId")
+    fun deleteTaskById(taskId: Int)
+
+    @Query("SELECT * FROM taskDb WHERE isCompleted = 0 ORDER BY date")
+    fun getCompletedTasksSortedByDate(): List<Task>
 }

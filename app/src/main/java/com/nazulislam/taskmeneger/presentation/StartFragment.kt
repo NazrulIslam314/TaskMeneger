@@ -12,6 +12,7 @@ import androidx.room.Room
 import com.nazulislam.taskmeneger.R
 import com.nazulislam.taskmeneger.data.TaskDatabase
 import com.nazulislam.taskmeneger.databinding.FragmentStartBinding
+import com.nazulislam.taskmeneger.domain.CompleteTaskAdapter
 import com.nazulislam.taskmeneger.domain.OnTaskClickListener
 import com.nazulislam.taskmeneger.domain.TaskAdapter
 import kotlinx.coroutines.Dispatchers
@@ -19,12 +20,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class StartFragment : Fragment(), OnTaskClickListener
-{
+class StartFragment : Fragment(), OnTaskClickListener {
 
     private lateinit var binding: FragmentStartBinding
-    private lateinit var taskAdapter : TaskAdapter
-    private  val db : TaskDatabase by lazy {
+    private lateinit var taskAdapter: TaskAdapter
+    private lateinit var completeTaskAdapter: CompleteTaskAdapter
+    private val db: TaskDatabase by lazy {
         Room.databaseBuilder(
             requireContext().applicationContext, TaskDatabase::class.java, "task_database"
         ).build()
@@ -37,6 +38,7 @@ class StartFragment : Fragment(), OnTaskClickListener
     ): View {
         binding = FragmentStartBinding.inflate(inflater, container, false)
         taskAdapter = TaskAdapter(emptyList(), this@StartFragment)
+        completeTaskAdapter = CompleteTaskAdapter(emptyList(), this@StartFragment)
         return binding.root
     }
 
@@ -49,36 +51,64 @@ class StartFragment : Fragment(), OnTaskClickListener
         }
 
 
-        // Setup RecyclerView
+        // Setup Pending RecyclerView
         binding.TaskRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = taskAdapter
+        }
+
+        // Setup Complete RecyclerView
+        binding.TaskCompletedRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = completeTaskAdapter
         }
     }
 
 
     private fun loadTask() {
         lifecycleScope.launch {
-            val task = withContext(Dispatchers.IO) {
-                db.taskDao().getAllTask()
+            val pendingTasks = withContext(Dispatchers.IO) { db.taskDao().getCompletedTasksSortedByDate() }
+            val completedTasks = withContext(Dispatchers.IO) { db.taskDao().getCompletedTasks() }
+
+            withContext(Dispatchers.Main) {
+                taskAdapter = TaskAdapter(pendingTasks, this@StartFragment)
+                completeTaskAdapter = CompleteTaskAdapter(completedTasks, this@StartFragment)
+                binding.TaskRecyclerView.adapter = taskAdapter
+                binding.TaskCompletedRecyclerView.adapter = completeTaskAdapter
             }
-            taskAdapter = TaskAdapter(task, this@StartFragment)
-            binding.TaskRecyclerView.adapter = taskAdapter
         }
     }
 
+override fun onResume() {
+    super.onResume()
+    loadTask()
+}
 
-    override fun onResume() {
-        super.onResume()
-        loadTask()
+
+override fun onTaskClick(taskId: Int) {
+    val bundle = Bundle().apply {
+        putInt("taskId", taskId)
     }
+    findNavController().navigate(R.id.action_startFragment_to_taskDeatilsFragment, bundle)
+}
 
-
-    override fun onTaskClick(taskId: Int) {
-        val bundle = Bundle().apply {
-            putInt("taskId", taskId)
+override fun onRemoveClick(taskId: Int) {
+    lifecycleScope.launch(Dispatchers.IO) {
+        db.taskDao().deleteTaskById(taskId)
+        withContext(Dispatchers.Main) {
+            loadTask()
         }
-        findNavController().navigate(R.id.action_startFragment_to_taskDeatilsFragment, bundle)
     }
+}
+
+override fun onTaskCheckedChange(taskId: Int, isChecked: Boolean) {
+    lifecycleScope.launch(Dispatchers.IO) {
+        db.taskDao().updateTaskCompletionStatus(taskId, isChecked)
+        withContext(Dispatchers.Main) {
+            loadTask()
+        }
+    }
+}
+
 
 }

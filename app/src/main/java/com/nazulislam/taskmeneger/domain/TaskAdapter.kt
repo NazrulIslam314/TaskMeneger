@@ -41,6 +41,10 @@ class TaskAdapter(private val taskList: List<Task>, private val listener: OnTask
             taskStatusChip.text = if (task.isCompleted) "Completed" else "In Progress"
 
             root.setOnClickListener { listener.onTaskClick(task.id) }
+
+            taskCheckbox.setOnCheckedChangeListener { _, isChecked ->
+                listener.onTaskCheckedChange(task.id, isChecked)
+            }
         }
 
     }
