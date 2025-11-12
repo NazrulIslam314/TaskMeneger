@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/nazulislam/taskmeneger/TaskMenegerApplication.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/com/nazulislam/taskmeneger/TaskMenegerApplication.kt" />
+              <option name="updatedContent" value="package com.nazulislam.taskmeneger&#10;&#10;import android.app.Application&#10;import com.google.android.material.color.DynamicColors&#10;&#10;class TaskMenegerApplication : Application() {&#10;    override fun onCreate() {&#10;        super.onCreate()&#10;        // Apply Material3 dynamic color to activities if available on device&#10;        DynamicColors.applyToActivitiesIfAvailable(this)&#10;    }&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

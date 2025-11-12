@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav_activity"
-    app:startDestination="@id/startFragment">
+    app:startDestination="@id/taskDeatilsFragment">
 
     <fragment
         android:id="@+id/startFragment"
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/taskDeatilsFragment"
-        android:name="com.nazulislam.taskmeneger.taskinfo.presentation.TaskDeatilsFragment"
+        android:name="com.nazulislam.taskmeneger.taskinfo.presentation.TaskDetailsFragment"
         android:label="fragment_task_deatils"
-        tools:layout="@layout/fragment_task_deatils" />
+        tools:layout="@layout/fragment_task_details" />
 </navigation>
