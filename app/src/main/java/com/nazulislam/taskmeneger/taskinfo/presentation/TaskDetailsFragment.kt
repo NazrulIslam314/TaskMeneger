@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.nazulislam.taskmeneger.R
 import com.nazulislam.taskmeneger.databinding.FragmentTaskDetailsBinding
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -34,8 +36,17 @@ class TaskDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val dueDate = binding.inTaskDueDate
-        dueDate.setOnClickListener { showDatePicker() }
+        setupToolbar()
+        binding.dateButton.setOnClickListener { showDatePicker() }
+        binding.saveButton.setOnClickListener {
+            // Handle save action
+        }
+    }
+
+    private fun setupToolbar() {
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
     }
 
     private fun showDatePicker() {
@@ -47,7 +58,7 @@ class TaskDetailsFragment : Fragment() {
             .build()
 
         val builder = MaterialDatePicker.Builder.datePicker()
-            .setTitleText("Select Due Date")
+            .setTitleText(R.string.due_date)
             .setSelection(start)
             .setCalendarConstraints(constraints)
 
@@ -56,9 +67,9 @@ class TaskDetailsFragment : Fragment() {
         // Add listener first, then show the picker
         datePicker.addOnPositiveButtonClickListener { selection ->
             // selection is the epoch millis (Long)
-            val epoch = selection as? Long ?: return@addOnPositiveButtonClickListener
+            val epoch = selection ?: return@addOnPositiveButtonClickListener
             val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
-            binding.inTaskDueDate.setText(dateFormat.format(Date(epoch)))
+            binding.dateButton.text = dateFormat.format(Date(epoch))
         }
 
         datePicker.show(parentFragmentManager, "DATE_PICKER_TAG")
