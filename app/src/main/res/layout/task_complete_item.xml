@@ -48,10 +48,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="?attr/colorError"
+            android:contentDescription="@string/delete_task"
             app:icon="@drawable/ic_remove_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:iconGravity="textStart"
             app:iconTint="?attr/colorSurface"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

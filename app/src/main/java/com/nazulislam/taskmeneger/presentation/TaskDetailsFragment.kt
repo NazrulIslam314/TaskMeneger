@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.room.Room
+import com.nazulislam.taskmeneger.R
 import com.nazulislam.taskmeneger.data.Task
 import com.nazulislam.taskmeneger.data.TaskDatabase
 import com.nazulislam.taskmeneger.databinding.FragmentTaskDetailsBinding
@@ -19,7 +20,6 @@ import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import kotlin.text.format
 
 
 class TaskDetailsFragment : Fragment() {
@@ -31,6 +31,12 @@ class TaskDetailsFragment : Fragment() {
         ).build()
     }
 
+
+    private val taskIdToEdit: Int by lazy {
+        arguments?.getInt("taskId") ?: -1
+    }
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -41,29 +47,22 @@ class TaskDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Check the args
+        if (taskIdToEdit != -1) {
+            setEditTaskText(taskIdToEdit)
+            binding.saveBtn.text = getString(R.string.update)
+        }
 
         setupToolbar()
         binding.date.setOnClickListener {
             showDatePickerDialog(
                 childFragmentManager,
-                { selection -> updateDateButtonText(selection) })
+                { selection -> updateDateButtonText(selection)}, preselectedDate = selectedDate?.time)
         }
 
 
         binding.saveBtn.setOnClickListener {
-            val title = binding.inTitle.text.toString()
-            val description = binding.inDescription.text.toString()
-            val date = binding.date.text.toString()
-            if (validateInput(title, description, date)) {
-                saveTask(
-                    Task(
-                        title = title,
-                        description = description,
-                        date = selectedDate
-                    )
-                )
-            }
-
+            saveTask()
         }
     }
 
@@ -77,7 +76,7 @@ class TaskDetailsFragment : Fragment() {
     private fun updateDateButtonText(selection: Long) {
         val date = Date(selection)
         selectedDate = date
-        binding.date.text = formantDate(date)
+        binding.date.text = formatDate(date)
     }
 
     private fun validateInput(
@@ -89,18 +88,73 @@ class TaskDetailsFragment : Fragment() {
     }
 
 
-    private fun saveTask(task: Task) {
-        lifecycleScope.launch {
-            withContext(Dispatchers.IO) {
-                db.taskDao().addTask(task)
+    private fun saveTask() {
+        // select the input field
+        val title = binding.inTitle.text.toString()
+        val description = binding.inDescription.text.toString()
+        val date = binding.date.text.toString()
+
+        // validate the input
+        if (validateInput(title, description, date)) {
+
+            // try to store or update
+            lifecycleScope.launch {
+                val massage = if (taskIdToEdit == -1) {
+                    withContext(Dispatchers.IO) {
+                        val task = Task(
+                            title = title,
+                            description = description,
+                            date = selectedDate
+                        )
+                        db.taskDao().addTask(task)
+                        "Task Saved"
+                    }
+                } else {
+                    withContext(Dispatchers.IO) {
+
+                        // check the existingTask is not null
+                        val existingTask = db.taskDao().findTaskById(taskIdToEdit)
+                        if (existingTask != null) {
+                            val updatedTask = existingTask.copy(
+                                title = title,
+                                description = description,
+                                date = selectedDate
+                            )
+                            db.taskDao().updateTask(updatedTask)
+                            "Task Updated"
+                        } else {
+                            "Task Not Found"
+                        }
+                    }
+                }
+
+                Toast.makeText(requireContext(), massage, Toast.LENGTH_SHORT).show()
+                findNavController().navigateUp()
             }
-            Toast.makeText(requireContext(), "Task Saved", Toast.LENGTH_SHORT).show()
-            findNavController().navigateUp()
         }
+
+
     }
 
-    private fun formantDate(date : Date): String{
-        return  SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(date)
+    private fun formatDate(date: Date): String {
+        return SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(date)
+    }
+
+
+    private fun setEditTaskText(id: Int) {
+        lifecycleScope.launch {
+            val task = withContext(Dispatchers.IO) {
+                db.taskDao().findTaskById(id)
+            }
+            selectedDate = task?.date
+            withContext(Dispatchers.Main) {
+                with(binding) {
+                    inTitle.setText(task?.title)
+                    inDescription.setText(task?.description)
+                    date.text = task?.date?.let { formatDate(it) } ?: "Select Date"
+                }
+            }
+        }
     }
 
 
