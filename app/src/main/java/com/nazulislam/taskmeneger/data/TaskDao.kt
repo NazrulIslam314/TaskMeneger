@@ -8,16 +8,14 @@ import androidx.room.Update
 @Dao
 interface TaskDao {
 
-    @Insert()
+    @Insert
     fun addTask(task: Task)
 
-
-    @Update()
+    @Update
     fun updateTask(task: Task)
 
     @Query("SELECT * FROM taskDb")
     fun getAllTask(): List<Task>
-
 
     @Query("SELECT * FROM taskDb WHERE id = :taskId")
     fun findTaskById(taskId: Int): Task?
@@ -35,9 +33,8 @@ interface TaskDao {
     fun deleteTaskById(taskId: Int)
 
     @Query("SELECT * FROM taskDb WHERE isCompleted = 0 ORDER BY date")
-    fun getCompletedTasksSortedByDate(): List<Task>
+    fun getPendingTasksSortedByDate(): List<Task>
 
-    @Query("SELECT * FROM taskdb WHERE title LIKE '%' || :query || '%' OR description LIKE '%' || :query || '%'")
+    @Query("SELECT * FROM taskDb WHERE title LIKE '%' || :query || '%' OR description LIKE '%' || :query || '%'")
     suspend fun searchTasks(query: String): List<Task>
-
 }

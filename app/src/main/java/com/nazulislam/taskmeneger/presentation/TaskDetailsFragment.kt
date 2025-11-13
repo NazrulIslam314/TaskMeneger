@@ -13,6 +13,8 @@ import com.nazulislam.taskmeneger.R
 import com.nazulislam.taskmeneger.data.Task
 import com.nazulislam.taskmeneger.data.TaskDatabase
 import com.nazulislam.taskmeneger.databinding.FragmentTaskDetailsBinding
+import com.nazulislam.taskmeneger.utils.Constants.DATABASE_NAME
+import com.nazulislam.taskmeneger.utils.Constants.DATE_FORMAT
 import com.nazulislam.taskmeneger.utils.showDatePickerDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,15 +29,13 @@ class TaskDetailsFragment : Fragment() {
     private var selectedDate: Date? = null
     private val db: TaskDatabase by lazy {
         Room.databaseBuilder(
-            requireContext().applicationContext, TaskDatabase::class.java, "task_database"
+            requireContext().applicationContext, TaskDatabase::class.java, DATABASE_NAME
         ).build()
     }
-
 
     private val taskIdToEdit: Int by lazy {
         arguments?.getInt("taskId") ?: -1
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -90,7 +90,6 @@ class TaskDetailsFragment : Fragment() {
             )
         }
 
-
         binding.saveBtn.setOnClickListener {
             saveTask()
         }
@@ -101,7 +100,6 @@ class TaskDetailsFragment : Fragment() {
             findNavController().navigateUp()
         }
     }
-
 
     private fun updateDateButtonText(selection: Long) {
         val date = Date(selection)
@@ -117,7 +115,6 @@ class TaskDetailsFragment : Fragment() {
         return !(title.isBlank() || description.isBlank() || date.isBlank() || date == "Select Date")
     }
 
-
     private fun saveTask() {
         // select the input field
         val title = binding.inTitle.text.toString()
@@ -129,7 +126,7 @@ class TaskDetailsFragment : Fragment() {
 
             // try to store or update
             lifecycleScope.launch {
-                val massage = if (taskIdToEdit == -1) {
+                val message = if (taskIdToEdit == -1) {
                     withContext(Dispatchers.IO) {
                         val task = Task(
                             title = title,
@@ -157,17 +154,14 @@ class TaskDetailsFragment : Fragment() {
                         }
                     }
                 }
-                navigateUpWithToast(massage)
+                navigateUpWithToast(message)
             }
         }
-
-
     }
 
     private fun formatDate(date: Date): String {
-        return SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(date)
+        return SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(date)
     }
-
 
     private fun setEditTaskText(id: Int) {
         lifecycleScope.launch {
@@ -184,7 +178,6 @@ class TaskDetailsFragment : Fragment() {
             }
         }
     }
-
 
     private fun completeTask(taskId: Int) {
         lifecycleScope.launch(Dispatchers.IO) {
@@ -211,10 +204,8 @@ class TaskDetailsFragment : Fragment() {
         return task?.isCompleted ?: false
     }
 
-    private fun navigateUpWithToast(massage: String) {
-        Toast.makeText(requireContext(), massage, Toast.LENGTH_SHORT).show()
+    private fun navigateUpWithToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         findNavController().navigate(R.id.action_taskDeatilsFragment_to_startFragment)
     }
-
-
 }

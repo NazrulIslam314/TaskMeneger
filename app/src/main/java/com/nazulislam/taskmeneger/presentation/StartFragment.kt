@@ -15,6 +15,7 @@ import com.nazulislam.taskmeneger.databinding.FragmentStartBinding
 import com.nazulislam.taskmeneger.adapter.CompleteTaskAdapter
 import com.nazulislam.taskmeneger.adapter.OnTaskClickListener
 import com.nazulislam.taskmeneger.adapter.TaskAdapter
+import com.nazulislam.taskmeneger.utils.Constants.DATABASE_NAME
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -27,10 +28,9 @@ class StartFragment : Fragment(), OnTaskClickListener {
     private lateinit var completeTaskAdapter: CompleteTaskAdapter
     private val db: TaskDatabase by lazy {
         Room.databaseBuilder(
-            requireContext().applicationContext, TaskDatabase::class.java, "task_database"
+            requireContext().applicationContext, TaskDatabase::class.java, DATABASE_NAME
         ).build()
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,15 +50,14 @@ class StartFragment : Fragment(), OnTaskClickListener {
             findNavController().navigate(R.id.action_startFragment_to_taskDeatilsFragment)
         }
 
-
         // Setup Pending RecyclerView
-        binding.TaskRecyclerView.apply {
+        binding.taskRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = taskAdapter
         }
 
         // Setup Complete RecyclerView
-        binding.TaskCompletedRecyclerView.apply {
+        binding.taskCompletedRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = completeTaskAdapter
         }
@@ -72,48 +71,45 @@ class StartFragment : Fragment(), OnTaskClickListener {
 
     private fun loadTask() {
         lifecycleScope.launch {
-            val pendingTasks = withContext(Dispatchers.IO) { db.taskDao().getCompletedTasksSortedByDate() }
+            val pendingTasks = withContext(Dispatchers.IO) { db.taskDao().getPendingTasksSortedByDate() }
             val completedTasks = withContext(Dispatchers.IO) { db.taskDao().getCompletedTasks() }
 
             withContext(Dispatchers.Main) {
                 taskAdapter = TaskAdapter(pendingTasks, this@StartFragment)
                 completeTaskAdapter = CompleteTaskAdapter(completedTasks, this@StartFragment)
-                binding.TaskRecyclerView.adapter = taskAdapter
-                binding.TaskCompletedRecyclerView.adapter = completeTaskAdapter
+                binding.taskRecyclerView.adapter = taskAdapter
+                binding.taskCompletedRecyclerView.adapter = completeTaskAdapter
             }
         }
     }
 
-override fun onResume() {
-    super.onResume()
-    loadTask()
-}
-
-
-override fun onTaskClick(taskId: Int) {
-    val bundle = Bundle().apply {
-        putInt("taskId", taskId)
+    override fun onResume() {
+        super.onResume()
+        loadTask()
     }
-    findNavController().navigate(R.id.action_startFragment_to_taskDeatilsFragment, bundle)
-}
 
-override fun onRemoveClick(taskId: Int) {
-    lifecycleScope.launch(Dispatchers.IO) {
-        db.taskDao().deleteTaskById(taskId)
-        withContext(Dispatchers.Main) {
-            loadTask()
+    override fun onTaskClick(taskId: Int) {
+        val bundle = Bundle().apply {
+            putInt("taskId", taskId)
+        }
+        findNavController().navigate(R.id.action_startFragment_to_taskDeatilsFragment, bundle)
+    }
+
+    override fun onRemoveClick(taskId: Int) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            db.taskDao().deleteTaskById(taskId)
+            withContext(Dispatchers.Main) {
+                loadTask()
+            }
         }
     }
-}
 
-override fun onTaskCheckedChange(taskId: Int, isChecked: Boolean) {
-    lifecycleScope.launch(Dispatchers.IO) {
-        db.taskDao().updateTaskCompletionStatus(taskId, isChecked)
-        withContext(Dispatchers.Main) {
-            loadTask()
+    override fun onTaskCheckedChange(taskId: Int, isChecked: Boolean) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            db.taskDao().updateTaskCompletionStatus(taskId, isChecked)
+            withContext(Dispatchers.Main) {
+                loadTask()
+            }
         }
     }
-}
-
-
 }

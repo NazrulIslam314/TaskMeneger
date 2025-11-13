@@ -12,7 +12,6 @@ class CompleteTaskAdapter(
 ) :
     RecyclerView.Adapter<CompleteTaskAdapter.CompleteTaskViewHolder>() {
 
-
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int
     ): CompleteTaskViewHolder {
@@ -23,7 +22,6 @@ class CompleteTaskAdapter(
         )
     }
 
-
     override fun onBindViewHolder(holder: CompleteTaskViewHolder, position: Int) {
         val task = taskList[position]
         holder.binding.apply {
@@ -32,7 +30,6 @@ class CompleteTaskAdapter(
             removeBtn.setOnClickListener { listener.onRemoveClick(task.id) }
             root.setOnClickListener { listener.onTaskClick(task.id) }
         }
-
     }
 
     override fun getItemCount(): Int = taskList.size

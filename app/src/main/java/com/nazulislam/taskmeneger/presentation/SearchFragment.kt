@@ -19,6 +19,7 @@ import com.nazulislam.taskmeneger.adapter.OnTaskClickListener
 import com.nazulislam.taskmeneger.adapter.TaskAdapter
 import com.nazulislam.taskmeneger.data.TaskDatabase
 import com.nazulislam.taskmeneger.databinding.FragmentSearchBinding
+import com.nazulislam.taskmeneger.utils.Constants.DATABASE_NAME
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -31,7 +32,7 @@ class SearchFragment : Fragment(), OnTaskClickListener {
         Room.databaseBuilder(
             requireContext().applicationContext,
             TaskDatabase::class.java,
-            "task_database"
+            DATABASE_NAME
         ).build()
     }
 
@@ -52,7 +53,6 @@ class SearchFragment : Fragment(), OnTaskClickListener {
         binding.searchEditText.requestFocus()
         val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(binding.searchEditText, InputMethodManager.SHOW_IMPLICIT)
-
 
         // Setup the recyclerView
         binding.searchRecyclerView.apply {
@@ -109,7 +109,6 @@ class SearchFragment : Fragment(), OnTaskClickListener {
         }
     }
 
-
     override fun onTaskClick(taskId: Int) {
         val bundle = Bundle().apply {
             putInt("taskId", taskId)
@@ -117,9 +116,10 @@ class SearchFragment : Fragment(), OnTaskClickListener {
         findNavController().navigate(R.id.action_searchFragment_to_taskDeatilsFragment, bundle)
     }
 
-    // Don't need the onRemoveClick in Search Fragment
+    // Remove functionality is not needed in Search Fragment
+    // Users should go to the main fragment to remove tasks
     override fun onRemoveClick(taskId: Int) {
-        TODO()
+        // Not implemented in search context
     }
 
     override fun onTaskCheckedChange(taskId: Int, isChecked: Boolean) {
@@ -137,8 +137,8 @@ class SearchFragment : Fragment(), OnTaskClickListener {
         loadTask()
     }
 
-    private fun navigateUpWithToast(massage: String) {
-        Toast.makeText(requireContext(), massage, Toast.LENGTH_SHORT).show()
+    private fun navigateUpWithToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         findNavController().navigateUp()
     }
 }

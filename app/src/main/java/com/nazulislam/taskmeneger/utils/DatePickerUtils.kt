@@ -6,18 +6,19 @@ import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 
 fun showDatePickerDialog(
-    fragmentManager: FragmentManager, onDateSelected: (Long) -> Unit, preselectedDate: Long? = null
+    fragmentManager: FragmentManager,
+    onDateSelected: (Long) -> Unit,
+    preselectedDate: Long? = null
 ) {
     val constraintsBuilder =
         CalendarConstraints.Builder().setValidator(DateValidatorPointForward.now())
 
-    val datePickerBuilder = MaterialDatePicker.Builder.datePicker().setTitleText("Select Date")
+    val datePickerBuilder = MaterialDatePicker.Builder.datePicker()
+        .setTitleText("Select Date")
         .setCalendarConstraints(constraintsBuilder.build())
         .setSelection(preselectedDate ?: MaterialDatePicker.todayInUtcMilliseconds())
 
-
     val datePicker = datePickerBuilder.build()
-
 
     datePicker.addOnPositiveButtonClickListener { selection ->
         onDateSelected(selection)
@@ -25,4 +26,3 @@ fun showDatePickerDialog(
 
     datePicker.show(fragmentManager, "MATERIAL_DATE_PICKER")
 }
-
