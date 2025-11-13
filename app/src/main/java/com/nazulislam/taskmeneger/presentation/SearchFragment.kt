@@ -43,7 +43,8 @@ class SearchFragment : Fragment(), OnTaskClickListener {
 
         // auto open the keyboard
         binding.searchEditText.requestFocus()
-        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(binding.searchEditText, InputMethodManager.SHOW_IMPLICIT)
 
         // Setup the recyclerView

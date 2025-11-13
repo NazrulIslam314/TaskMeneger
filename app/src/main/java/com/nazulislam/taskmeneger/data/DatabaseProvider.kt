@@ -18,5 +18,6 @@ object DatabaseProvider {
             INSTANCE = instance
             instance
         }
+
     }
 }

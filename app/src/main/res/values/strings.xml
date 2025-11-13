@@ -71,6 +71,6 @@
     <string name="completed_task">Completed Task</string>
     <string name="update">update</string>
     <string name="search">Search</string>
-    <string name="undoe_task">undo task</string>
+    <string name="undo_task">undo task</string>
 
 </resources>

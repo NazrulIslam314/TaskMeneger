@@ -1,19 +1,19 @@
 package com.nazulislam.taskmeneger.presentation
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nazulislam.taskmeneger.R
-import com.nazulislam.taskmeneger.databinding.FragmentStartBinding
 import com.nazulislam.taskmeneger.adapter.CompleteTaskAdapter
 import com.nazulislam.taskmeneger.adapter.OnTaskClickListener
 import com.nazulislam.taskmeneger.adapter.TaskAdapter
 import com.nazulislam.taskmeneger.data.DatabaseProvider
+import com.nazulislam.taskmeneger.databinding.FragmentStartBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -45,13 +45,13 @@ class StartFragment : Fragment(), OnTaskClickListener {
         }
 
         // Setup Pending RecyclerView
-        binding.taskRecyclerView.apply {
+        binding.TaskRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = taskAdapter
         }
 
         // Setup Complete RecyclerView
-        binding.taskCompletedRecyclerView.apply {
+        binding.TaskCompletedRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = completeTaskAdapter
         }
@@ -65,14 +65,15 @@ class StartFragment : Fragment(), OnTaskClickListener {
 
     private fun loadTask() {
         lifecycleScope.launch {
-            val pendingTasks = withContext(Dispatchers.IO) { db.taskDao().getPendingTasksSortedByDate() }
+            val pendingTasks =
+                withContext(Dispatchers.IO) { db.taskDao().getPendingTasksSortedByDate() }
             val completedTasks = withContext(Dispatchers.IO) { db.taskDao().getCompletedTasks() }
 
             withContext(Dispatchers.Main) {
                 taskAdapter = TaskAdapter(pendingTasks, this@StartFragment)
                 completeTaskAdapter = CompleteTaskAdapter(completedTasks, this@StartFragment)
-                binding.taskRecyclerView.adapter = taskAdapter
-                binding.taskCompletedRecyclerView.adapter = completeTaskAdapter
+                binding.TaskRecyclerView.adapter = taskAdapter
+                binding.TaskCompletedRecyclerView.adapter = completeTaskAdapter
             }
         }
     }

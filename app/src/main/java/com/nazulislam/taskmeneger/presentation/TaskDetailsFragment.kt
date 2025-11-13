@@ -5,12 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.nazulislam.taskmeneger.R
-import com.nazulislam.taskmeneger.data.Task
 import com.nazulislam.taskmeneger.data.DatabaseProvider
+import com.nazulislam.taskmeneger.data.Task
 import com.nazulislam.taskmeneger.databinding.FragmentTaskDetailsBinding
 import com.nazulislam.taskmeneger.utils.Constants.DATE_FORMAT
 import com.nazulislam.taskmeneger.utils.showDatePickerDialog
@@ -51,13 +52,16 @@ class TaskDetailsFragment : Fragment() {
                         inDescription.isEnabled = false
                         date.isEnabled = false
                         saveBtn.visibility = View.GONE
-                        with(markCompeleteBtn) {
-                            text = getString(R.string.undoe_task)
+                        with(binding.markCompeleteBtn) {
+                            icon =
+                                ContextCompat.getDrawable(requireContext(), R.drawable.ic_undo_icon)
+                            text = getString(R.string.undo_task)
                             visibility = View.VISIBLE
                             setOnClickListener {
                                 undoTask(taskIdToEdit)
                             }
                         }
+
                     }
                 } else {
                     with(binding) {
