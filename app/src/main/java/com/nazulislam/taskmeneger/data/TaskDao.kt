@@ -14,9 +14,6 @@ interface TaskDao {
     @Update
     fun updateTask(task: Task)
 
-    @Query("SELECT * FROM taskDb")
-    fun getAllTask(): List<Task>
-
     @Query("SELECT * FROM taskDb WHERE id = :taskId")
     fun findTaskById(taskId: Int): Task?
 

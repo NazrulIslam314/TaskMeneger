@@ -64,7 +64,6 @@ class TaskDetailsFragment : Fragment() {
                                 undoTask(taskIdToEdit)
                             }
                         }
-                        markCompeleteBtn
                     }
                 } else {
                     with(binding) {
