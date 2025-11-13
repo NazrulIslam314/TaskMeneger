@@ -52,7 +52,6 @@ class SearchFragment : Fragment(), OnTaskClickListener {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = taskAdapter
         }
-        loadTask()
 
         // listen the user input change
         binding.searchEditText.addTextChangedListener(object : TextWatcher {
@@ -61,11 +60,8 @@ class SearchFragment : Fragment(), OnTaskClickListener {
 
             override fun afterTextChanged(editable: Editable?) {
                 val query = editable.toString().trim()
-                if (query.isEmpty()) {
-                    loadTask()
-                } else {
+
                     searchTask(query)
-                }
             }
         })
     }
@@ -76,18 +72,7 @@ class SearchFragment : Fragment(), OnTaskClickListener {
         }
     }
 
-    private fun loadTask() {
-        lifecycleScope.launch {
-            val tasks = withContext(Dispatchers.IO) {
-                db.taskDao().getPendingTasks()
-            }
 
-            withContext(Dispatchers.Main) {
-                taskAdapter = TaskAdapter(tasks, this@SearchFragment)
-                binding.searchRecyclerView.adapter = taskAdapter
-            }
-        }
-    }
 
     private fun searchTask(query: String) {
         lifecycleScope.launch {
@@ -119,16 +104,11 @@ class SearchFragment : Fragment(), OnTaskClickListener {
         lifecycleScope.launch(Dispatchers.IO) {
             db.taskDao().updateTaskCompletionStatus(taskId, isChecked)
             withContext(Dispatchers.Main) {
-                loadTask()
                 navigateUpWithToast("Task Completed Success")
             }
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        loadTask()
-    }
 
     private fun navigateUpWithToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
