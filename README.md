@@ -52,26 +52,6 @@
 - Tap on any task to view or edit its details.
 - Use the checkbox to mark a task as complete.
 
-## 📂 Project Structure
-
-```
-.
-├── app
-│   ├── src
-│   │   ├── main
-│   │   │   ├── java
-│   │   │   │   └── com/nazulislam/taskmeneger
-│   │   │   │       ├── adapter      # Adapter
-                    ├── data      # Room database, entities, and DAO
-│   │   │   │       ├── presentation # UI layer (Activities, Fragments, ViewModels)
-│   │   │   │       └── utils     # Utility classes
-│   │   │   ├── res 
-            └── manifests
-│   │   │       └── AndroidManifest.xml
-│   └── build.gradle.kts
-└── build.gradle.kts
-```
-
 ## 🤝 Contributing
 
 Contributions are welcome! If you have any ideas, suggestions, or bug reports, please open an issue or submit a pull request.
