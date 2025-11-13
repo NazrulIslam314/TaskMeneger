@@ -5,19 +5,6 @@
     A simple and intuitive task management application for Android to help you stay organized and productive.
   </p>
 
-<!-- Badges -->
-<p>
-  <a href="https://opensource.org/licenses/MIT">
-    <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License">
-  </a>
-  <a href="https://github.com/NazrulIslam314/task-manager/issues">
-    <img src="https://img.shields.io/github/issues/your-username/task-manager" alt="Issues">
-  </a>
-  <a href="https://github.com/NazrulIslam314/task-manager/stargazers">
-    <img src="https://img.shields.io/github/stars/your-username/task-manager" alt="Stars">
-  </a>
-</p>
-</div>
 
 ## ✨ Features
 
