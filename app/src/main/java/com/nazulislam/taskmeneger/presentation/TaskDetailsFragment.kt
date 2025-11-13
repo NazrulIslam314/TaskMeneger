@@ -8,12 +8,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.room.Room
 import com.nazulislam.taskmeneger.R
 import com.nazulislam.taskmeneger.data.Task
-import com.nazulislam.taskmeneger.data.TaskDatabase
+import com.nazulislam.taskmeneger.data.DatabaseProvider
 import com.nazulislam.taskmeneger.databinding.FragmentTaskDetailsBinding
-import com.nazulislam.taskmeneger.utils.Constants.DATABASE_NAME
 import com.nazulislam.taskmeneger.utils.Constants.DATE_FORMAT
 import com.nazulislam.taskmeneger.utils.showDatePickerDialog
 import kotlinx.coroutines.Dispatchers
@@ -27,11 +25,7 @@ import java.util.Locale
 class TaskDetailsFragment : Fragment() {
     private lateinit var binding: FragmentTaskDetailsBinding
     private var selectedDate: Date? = null
-    private val db: TaskDatabase by lazy {
-        Room.databaseBuilder(
-            requireContext().applicationContext, TaskDatabase::class.java, DATABASE_NAME
-        ).build()
-    }
+    private val db by lazy { DatabaseProvider.getDatabase(requireContext()) }
 
     private val taskIdToEdit: Int by lazy {
         arguments?.getInt("taskId") ?: -1

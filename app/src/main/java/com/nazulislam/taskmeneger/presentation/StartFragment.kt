@@ -8,14 +8,12 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
 import com.nazulislam.taskmeneger.R
-import com.nazulislam.taskmeneger.data.TaskDatabase
 import com.nazulislam.taskmeneger.databinding.FragmentStartBinding
 import com.nazulislam.taskmeneger.adapter.CompleteTaskAdapter
 import com.nazulislam.taskmeneger.adapter.OnTaskClickListener
 import com.nazulislam.taskmeneger.adapter.TaskAdapter
-import com.nazulislam.taskmeneger.utils.Constants.DATABASE_NAME
+import com.nazulislam.taskmeneger.data.DatabaseProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -26,11 +24,7 @@ class StartFragment : Fragment(), OnTaskClickListener {
     private lateinit var binding: FragmentStartBinding
     private lateinit var taskAdapter: TaskAdapter
     private lateinit var completeTaskAdapter: CompleteTaskAdapter
-    private val db: TaskDatabase by lazy {
-        Room.databaseBuilder(
-            requireContext().applicationContext, TaskDatabase::class.java, DATABASE_NAME
-        ).build()
-    }
+    private val db by lazy { DatabaseProvider.getDatabase(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

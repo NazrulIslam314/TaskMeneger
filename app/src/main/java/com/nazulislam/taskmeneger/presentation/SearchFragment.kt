@@ -13,13 +13,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
 import com.nazulislam.taskmeneger.R
 import com.nazulislam.taskmeneger.adapter.OnTaskClickListener
 import com.nazulislam.taskmeneger.adapter.TaskAdapter
-import com.nazulislam.taskmeneger.data.TaskDatabase
+import com.nazulislam.taskmeneger.data.DatabaseProvider
 import com.nazulislam.taskmeneger.databinding.FragmentSearchBinding
-import com.nazulislam.taskmeneger.utils.Constants.DATABASE_NAME
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -28,13 +26,7 @@ class SearchFragment : Fragment(), OnTaskClickListener {
     private lateinit var binding: FragmentSearchBinding
     private lateinit var taskAdapter: TaskAdapter
 
-    private val db: TaskDatabase by lazy {
-        Room.databaseBuilder(
-            requireContext().applicationContext,
-            TaskDatabase::class.java,
-            DATABASE_NAME
-        ).build()
-    }
+    private val db by lazy { DatabaseProvider.getDatabase(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
