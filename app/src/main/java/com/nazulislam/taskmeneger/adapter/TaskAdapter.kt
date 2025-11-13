@@ -1,4 +1,4 @@
-package com.nazulislam.taskmeneger.domain
+package com.nazulislam.taskmeneger.adapter
 
 import android.view.LayoutInflater
 import android.view.View

@@ -12,9 +12,9 @@ import androidx.room.Room
 import com.nazulislam.taskmeneger.R
 import com.nazulislam.taskmeneger.data.TaskDatabase
 import com.nazulislam.taskmeneger.databinding.FragmentStartBinding
-import com.nazulislam.taskmeneger.domain.CompleteTaskAdapter
-import com.nazulislam.taskmeneger.domain.OnTaskClickListener
-import com.nazulislam.taskmeneger.domain.TaskAdapter
+import com.nazulislam.taskmeneger.adapter.CompleteTaskAdapter
+import com.nazulislam.taskmeneger.adapter.OnTaskClickListener
+import com.nazulislam.taskmeneger.adapter.TaskAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -61,6 +61,11 @@ class StartFragment : Fragment(), OnTaskClickListener {
         binding.TaskCompletedRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = completeTaskAdapter
+        }
+
+        // search Button
+        binding.searchBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_startFragment_to_searchFragment)
         }
     }
 

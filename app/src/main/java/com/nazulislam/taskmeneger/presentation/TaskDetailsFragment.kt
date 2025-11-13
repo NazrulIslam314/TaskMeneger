@@ -49,15 +49,45 @@ class TaskDetailsFragment : Fragment() {
 
         // Check the args
         if (taskIdToEdit != -1) {
-            setEditTaskText(taskIdToEdit)
-            binding.saveBtn.text = getString(R.string.update)
+            lifecycleScope.launch {
+                if (isTaskCompleted(taskIdToEdit)) {
+                    with(binding) {
+                        toolbar.title = getString(R.string.completed_task)
+                        inTitle.isEnabled = false
+                        inDescription.isEnabled = false
+                        date.isEnabled = false
+                        saveBtn.visibility = View.GONE
+                        with(markCompeleteBtn) {
+                            text = getString(R.string.undoe_task)
+                            visibility = View.VISIBLE
+                            setOnClickListener {
+                                undoTask(taskIdToEdit)
+                            }
+                        }
+                        markCompeleteBtn
+                    }
+                } else {
+                    with(binding) {
+                        saveBtn.text = getString(R.string.update)
+                        toolbar.title = getString(R.string.edit_task)
+                        markCompeleteBtn.visibility = View.VISIBLE
+                        markCompeleteBtn.setOnClickListener {
+                            completeTask(taskIdToEdit)
+                        }
+                    }
+
+                }
+                setEditTaskText(taskIdToEdit)
+            }
         }
 
         setupToolbar()
         binding.date.setOnClickListener {
             showDatePickerDialog(
                 childFragmentManager,
-                { selection -> updateDateButtonText(selection)}, preselectedDate = selectedDate?.time)
+                { selection -> updateDateButtonText(selection) },
+                preselectedDate = selectedDate?.time
+            )
         }
 
 
@@ -127,9 +157,7 @@ class TaskDetailsFragment : Fragment() {
                         }
                     }
                 }
-
-                Toast.makeText(requireContext(), massage, Toast.LENGTH_SHORT).show()
-                findNavController().navigateUp()
+                navigateUpWithToast(massage)
             }
         }
 
@@ -155,6 +183,37 @@ class TaskDetailsFragment : Fragment() {
                 }
             }
         }
+    }
+
+
+    private fun completeTask(taskId: Int) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            db.taskDao().updateTaskCompletionStatus(taskId, true)
+            withContext(Dispatchers.Main) {
+                navigateUpWithToast("Task completed Success")
+            }
+        }
+    }
+
+    private fun undoTask(taskId: Int) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            db.taskDao().updateTaskCompletionStatus(taskId, false)
+            withContext(Dispatchers.Main) {
+                navigateUpWithToast("Task undo Success")
+            }
+        }
+    }
+
+    private suspend fun isTaskCompleted(taskId: Int): Boolean {
+        val task = withContext(Dispatchers.IO) {
+            db.taskDao().findTaskById(taskId)
+        }
+        return task?.isCompleted ?: false
+    }
+
+    private fun navigateUpWithToast(massage: String) {
+        Toast.makeText(requireContext(), massage, Toast.LENGTH_SHORT).show()
+        findNavController().navigate(R.id.action_taskDeatilsFragment_to_startFragment)
     }
 
 

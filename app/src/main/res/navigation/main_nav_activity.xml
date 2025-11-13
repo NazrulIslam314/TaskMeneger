@@ -13,10 +13,26 @@
         <action
             android:id="@+id/action_startFragment_to_taskDeatilsFragment"
             app:destination="@id/taskDeatilsFragment" />
+        <action
+            android:id="@+id/action_startFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
     <fragment
         android:id="@+id/taskDeatilsFragment"
         android:name="com.nazulislam.taskmeneger.presentation.TaskDetailsFragment"
         android:label="fragment_task_deatils"
-        tools:layout="@layout/fragment_task_details" />
+        tools:layout="@layout/fragment_task_details" >
+        <action
+            android:id="@+id/action_taskDeatilsFragment_to_startFragment"
+            app:destination="@id/startFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.nazulislam.taskmeneger.presentation.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_taskDeatilsFragment"
+            app:destination="@id/taskDeatilsFragment" />
+    </fragment>
 </navigation>

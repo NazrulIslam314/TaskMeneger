@@ -1,4 +1,4 @@
-package com.nazulislam.taskmeneger.domain
+package com.nazulislam.taskmeneger.adapter
 
 interface OnTaskClickListener {
     fun onTaskClick(taskId: Int)

@@ -1,4 +1,4 @@
-package com.nazulislam.taskmeneger.domain
+package com.nazulislam.taskmeneger.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -30,6 +30,7 @@ class CompleteTaskAdapter(
             taskTitle.text = task.title
 
             removeBtn.setOnClickListener { listener.onRemoveClick(task.id) }
+            root.setOnClickListener { listener.onTaskClick(task.id) }
         }
 
     }

@@ -71,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/due_date"
+                android:text="@string/date"
                 app:icon="@drawable/ic_date_icon" />
 
             <com.google.android.material.button.MaterialButton
@@ -83,5 +83,19 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/markCompeleteBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/_24sdp"
+        android:contentDescription="@string/add_task"
+        app:backgroundTint="?attr/colorPrimaryContainer"
+        app:icon="@drawable/ic_check_icon"
+        app:iconTint="?attr/colorOnPrimaryContainer"
+        android:text="@string/mark_complete"
+        android:visibility="gone"
+        />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
