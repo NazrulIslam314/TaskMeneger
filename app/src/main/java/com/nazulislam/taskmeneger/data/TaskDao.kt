@@ -36,4 +36,8 @@ interface TaskDao {
 
     @Query("SELECT * FROM taskDb WHERE isCompleted = 0 ORDER BY date")
     fun getCompletedTasksSortedByDate(): List<Task>
+
+    @Query("SELECT * FROM taskdb WHERE title LIKE '%' || :query || '%' OR description LIKE '%' || :query || '%'")
+    suspend fun searchTasks(query: String): List<Task>
+
 }
